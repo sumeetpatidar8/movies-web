@@ -1,0 +1,56 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+.logo svg:hover g:first-child {
+  fill: #dbad05;
+}
+
+input::placeholder {
+  font-size: 13px;
+  font-weight: 400;
+}
+
+.searchBar:focus-within {
+  outline: 2px solid #F5C518;
+  border: 0;
+}
+
+input[type='text'] {
+  caret-color: black;
+  outline: 0;
+}
+
+body {
+  color: white;
+  background-color: black;
+  overflow-x: hidden;
+}
+
+*::-webkit-scrollbar {
+  width: 2cqh;
+}
+*::-webkit-scrollbar-track {
+  background-color: black;
+}
+*::-webkit-scrollbar-thumb {
+  background-color: white;
+  border-left: 5px solid black;
+  border-right: 5px solid black;
+}
+
+.title::before {
+  content: "";
+  background-color: #F5C518;
+  border-radius: 20px;
+  margin-left: -0.75rem;
+  align-self: start;
+  position: absolute;
+  height: 100%;
+  width: 4px;
+}
+
+.title:hover .icon {
+  stroke: #F5C518;
+}

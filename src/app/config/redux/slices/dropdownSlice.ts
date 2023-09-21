@@ -8,7 +8,7 @@ interface DropdownState {
   }
   
   const dropdownInitialState: DropdownState = {
-    selectedOption: "All",
+    selectedOption: "Movie",
     isVisible: false,
   };
 

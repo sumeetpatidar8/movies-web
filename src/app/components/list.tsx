@@ -1,7 +1,7 @@
 interface ListProps {
     data: {
       [section: string]: {
-        icon: React.ElementType; // Define the type for the icon
+        icon: React.ElementType;
         category: string[];
       };
     };
@@ -9,7 +9,6 @@ interface ListProps {
 
 export const List = (props:ListProps) => {
     const data = props.data;
-    console.log(data)
     return(
         <div className="flex flex-wrap justify-between mt-14">
             {Object.entries(data).map(([section, {icon: Icon, category}]) => (

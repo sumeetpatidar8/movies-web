@@ -28,19 +28,35 @@ body {
   overflow-x: hidden;
 }
 
-*::-webkit-scrollbar {
+body::-webkit-scrollbar {
   width: 2cqh;
 }
-*::-webkit-scrollbar-track {
+body::-webkit-scrollbar-track {
   background-color: black;
 }
-*::-webkit-scrollbar-thumb {
+body::-webkit-scrollbar-thumb {
   background-color: white;
   border-left: 5px solid black;
   border-right: 5px solid black;
 }
 
-.title::before {
+#watchlistModal::-webkit-scrollbar {
+  width: 2cqh;
+}
+#watchlistModal::-webkit-scrollbar-track {
+  background-color: white;
+}
+#watchlistModal::-webkit-scrollbar-thumb {
+  background-color: black;
+  border-left: 5px solid white;
+  border-right: 5px solid white;
+}
+
+input[type="checkbox"]:checked {
+  accent-color: #121212!important;
+}
+
+.title.required::before {
   content: "";
   background-color: #F5C518;
   border-radius: 20px;
@@ -53,4 +69,49 @@ body {
 
 .title:hover .icon {
   stroke: #F5C518;
+}
+
+.swiper-pagination {
+  position: relative!important;
+  bottom: 0!important;
+  margin-top: 20px!important;
+}
+
+.swiper-pagination-bullet {
+  width: 20px;
+  height: 20px;
+  text-align: center;
+  line-height: 20px;
+  font-size: 16px;
+  opacity: 1;
+  width: fit-content!important;
+  height: fit-content!important;
+  padding: 2px 8px;
+  display: inline!important;
+  color: #fff!important;
+  opacity: 1!important;
+}
+
+.swiper-pagination-bullet-active {
+  color: #000!important;
+  background: #F5C518!important;
+
+}
+
+.swiper-button-prev:after, .swiper-button-next:after {
+  font-size: 25px!important;
+  font-weight: bold;
+  color: #fff!important;
+  background-color: rgba(0, 0, 0, 0.7);
+  border: 1px solid #fff;
+  border-radius: 2px;
+  padding: 20px 15px;
+}
+
+#watchlist {
+  transition: all 200ms ease-in-out!important;
+}
+
+#watchlist:hover {
+  background-color: rgba(87, 153, 239, 0.2)!important;
 }

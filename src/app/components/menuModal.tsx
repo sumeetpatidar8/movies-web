@@ -47,7 +47,7 @@ const list:List = {
 }
 
 export const MenuModal = () => {
-    const modal = useAppSelector((state) => state.modal);
+    const modal = useAppSelector((state) => state.visible.modal['MENU']);
     const dispatch = useAppDispatch();
 
     return(
@@ -55,7 +55,7 @@ export const MenuModal = () => {
             <div className="flex justify-between">
                 <Logo />
                 <div className="cursor-pointer bg-yellow text-black rounded-3xl py-2 px-2 transition-all hover:bg-hover">
-                <BiX className="text-xl" onClick={() => dispatch(hideModal())} />
+                <BiX className="text-xl" onClick={() => dispatch(hideModal({id: 'MENU'}))} />
                 </div>
             </div>
             <div>

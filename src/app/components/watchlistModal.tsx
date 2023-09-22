@@ -2,19 +2,33 @@
 
 import { useAppDispatch, useAppSelector } from "../config/redux/hooks";
 import { BiTrash, BiX } from "react-icons/bi";
-import { hideModal } from "../config/redux/slices/modalSlice";
-import { useCallback, useEffect, useState } from "react";
+import { hideModal, showModal } from "../config/redux/slices/modalSlice";
+import React, { useCallback, useEffect, useState } from "react";
 import { BsChevronRight } from "react-icons/bs";
-import { AiFillStar } from "react-icons/ai";
+import { AiFillStar, AiOutlineStar } from "react-icons/ai";
 import { Button } from "./button";
 import { removeItem, removeMultipleItems } from "../config/redux/slices/watchListSlice";
+import { Rating } from './rating';
 
 export const WatchlistModal = () => {
     const dispatch = useAppDispatch();
     const watchlistModal = useAppSelector( ( state ) => state.visible.modal[ 'WATCHLIST' ] );
+    const ratingModal = useAppSelector((state) => state.visible.modal['RATING']);
     const watchlist = useAppSelector( ( state ) => state.watch );
     const info = watchlist.entities;
     const [ selectedItems, setSelectedItems ] = useState<Set<string>>( new Set() );
+    const [selectAllChecked, setSelectAllChecked] = useState(false);
+    const ratingSession = sessionStorage.getItem('rating');
+    const [ratingData, setRatingData]:any = useState([]);
+
+    useEffect(() => {
+        if(ratingSession) {
+            const result = JSON.parse(ratingSession);
+            setRatingData(result);
+        }
+
+    },[ratingModal, ratingSession])
+
     if ( watchlistModal.isVisible ) {
         document.body.style.overflowY = "hidden";
     } else {
@@ -39,8 +53,32 @@ export const WatchlistModal = () => {
     const handleDelete = useCallback( () => {
         dispatch( removeMultipleItems( selectedItemsArray ) );
         setSelectedItems( new Set() );
+        setSelectAllChecked(false);
+        const session = sessionStorage.getItem('watchlistStatus');
+        if(session) {
+            const status = JSON.parse(session);
+            const updatedStatus = {...status};
+            selectedItemsArray.forEach((item:any) => {
+                updatedStatus[item] = false;
+            })
+            sessionStorage.setItem('watchlistStatus', JSON.stringify(updatedStatus));
+        }
     }, [ dispatch, selectedItemsArray ] );
 
+
+    const handleSingleDelete = useCallback((imdbID:string) => {
+        dispatch( removeItem( imdbID ) );
+        setSelectedItems( new Set() );
+        const session = sessionStorage.getItem('watchlistStatus');
+        if(session) {
+            const status = JSON.parse(session);
+            const updatedStatus = {
+                ...status,
+                [imdbID]: false,
+            }
+            sessionStorage.setItem('watchlistStatus', JSON.stringify(updatedStatus));
+        }
+    },[dispatch])
     function convertMinutesToHoursAndMinutes ( runtime: string ) {
         const parts = runtime.split( " " );
 
@@ -56,7 +94,21 @@ export const WatchlistModal = () => {
         return runtime;
     }
 
+    const handleSelectAll = () => {
+        if (selectAllChecked) {
+            setSelectedItems(new Set());
+        } else {
+            const allItemKeys = Object.keys(info || {});
+            setSelectedItems(new Set(allItemKeys));
+        }
+        setSelectAllChecked(!selectAllChecked);
+    };
 
+  
+    const handleRating = useCallback((id: string) => {
+        dispatch(showModal({id: 'RATING', imdbId: id}));
+    },[dispatch])
+    
 
     return (
         <div className="fixed z-10 top-0 left-0 w-full h-full flex-col bg-transparent transition-all py-20 px-80" style={ watchlistModal.isVisible ? { opacity: 1, zIndex: 10 } : { opacity: 0, zIndex: -1 } }>
@@ -69,18 +121,28 @@ export const WatchlistModal = () => {
                 </div>
                 <div className="bg-gray-100 py-4 px-4 border-b-[1px] flex justify-between border-zinc-500 text-gray-500">
                     <p className="text-xs">{ watchlist.watchlistLength > 0 ? ( watchlist.watchlistLength ) : ( '' ) }  Titles</p>
-                    <p className="text-xs flex items-center gap-2"><span className="text-[#e88c02] text-sm text-extrabold">{ selectedItemsLength > 0 ? selectedItemsLength : '' }</span> Selected</p>
+                    <div className="flex gap-10 items-center">
+                        <p className="text-xs flex items-center gap-2"><span className="text-[#e88c02] text-bold">{ selectedItemsLength > 0 ? selectedItemsLength : '' }</span> Selected</p>
+                        <div className="flex items-center gap-2 cursor-pointer" onClick={handleSelectAll}>
+                            <input type="checkbox"
+                                className="cursor-pointer"
+                                checked={selectAllChecked}
+                                onChange={handleSelectAll}
+                            />
+                            <p className="text-xs">Select All</p>
+                        </div>
+                    </div>
                 </div>
-                <div className="px-4 bg-white h-[70.5vh] overflow-y-auto" id="watchlistModal">
+                <div className="bg-white h-[70.5vh] overflow-y-auto" id="watchlistModal">
                     {
                         info ? (
                             Object.keys( info ).map( ( item ) => {
                                 const data = info[ item ];
                                 return (
-                                    <>
+                                    <React.Fragment key={data.imdbID}>
                                         { data && (
                                             <>
-                                                <div className="flex gap-4 bg-white pb-6 pt-6 text-black border-b-[1px] border-slate-400">
+                                                <div className="flex gap-4 bg-white px-4 pb-6 pt-6 text-black hover:bg-slate-100 border-b-[1px] transition-all border-slate-400">
                                                     <div className="w-[15%] mb-4">
                                                         <img src={ data.Poster } alt={ data.Title } className="max-w-[100%] w-full max-h-[100%] object-fill" />
                                                     </div>
@@ -95,13 +157,12 @@ export const WatchlistModal = () => {
                                                                     <input type="checkbox"
                                                                         className="cursor-pointer"
                                                                         checked={ selectedItems.has( item ) }
-                                                                        onChange={ () => { handleItemSelect( item ); } } />
+                                                                        onChange={() => handleItemSelect(item)}
+                                                                    />
                                                                 </div>
-                                                                <BiTrash className="cursor-pointer" onClick={(e:any) => {
-                                                                    e.stopPropagation(); 
-                                                                    dispatch(removeItem(data.imdbID));
-                                                                    setSelectedItems( new Set() );
-                                                                    }} />
+                                                                <BiTrash className="cursor-pointer" onClick={ ( e: any ) => {
+                                                                    handleSingleDelete(data.imdbID)
+                                                                } } />
                                                             </div>
                                                         </div>
                                                         <div className="flex text-xs items-center font-semibold text-zinc-800 gap-1">
@@ -116,11 +177,32 @@ export const WatchlistModal = () => {
                                                             </div>
                                                         </div>
                                                         <div className="flex text-xs items-center font-semibold text-zinc-800 gap-1">
-                                                            <p>{ data.Actors.replace( /,/g, "|" ).replace( /\./g, " | " ) }    </p>
+                                                            <p>{ data.Actors.replace( /,/g, " | " ) }</p>
                                                         </div>
+                                                        <div className="flex items-center gap-4">
                                                         <div className="flex items-center gap-2">
                                                             <AiFillStar className="fill-yellow" />
-                                                            <p className="text-zinc-600 font-semibold text-sm"><span className="text-zinc-400">{ data.imdbRating }</span> / 10</p>
+                                                            <p className="text-zinc-400 font-semibold text-sm"><span className="text-zinc-600">{ data.imdbRating }</span> / 10</p>
+                                                        </div>
+                                                        <div 
+                                                        onClick={(e:any) => {e.stopPropagation(); handleRating(data.imdbID)}}
+                                                        className="flex items-center gap-1 cursor-pointer transition-all ease-{cubic-bezier(0.230, 1.000, 0.320, 1.000)} hover:scale-105 hover:text-modalColor">
+                                                            <AiOutlineStar className="stroke-slate-500" />
+                                                        <p className="font-medium text-xs">
+                                                             {
+                                                                ratingData.some((item: any) => (
+                                                                  item.id === data.imdbID && item.rating !== 0 && item.comment !== ''
+                                                                )) ? (
+                                                                  ratingData.find((item: any) => (
+                                                                    item.id === data.imdbID && item.rating !== 0 && item.comment !== ''
+                                                                  )).rating
+                                                                ) : (
+                                                                  'Rating'
+                                                                )
+                                                              }
+                                                        </p>
+                                                        </div>
+                                                        <Rating imdb={data.imdbID} />
                                                         </div>
                                                         <div className="text-black">
                                                             <p className="text-sm ">{ data.Plot }</p>
@@ -129,7 +211,7 @@ export const WatchlistModal = () => {
                                                 </div>
                                             </>
                                         ) }
-                                    </>
+                                    </React.Fragment>
                                 );
                             } )
                         ) : (
@@ -138,7 +220,7 @@ export const WatchlistModal = () => {
                     }
                 </div>
                 <div className="flex text-black bg-gray-100 border-t-[1px] border-zinc-500 py-2 justify-center">
-                    <Button text="Delete" buttonBg="#c70606" textStyle="text-white text-sm font-medium" onClick={ ( e: any ) => { e.stopPropagation(); handleDelete(); } } />
+                    <Button text="Delete All" buttonBg="#c70606" textStyle="text-white text-sm font-medium" onClick={ ( e: any ) => { e.stopPropagation(); handleDelete(); } } />
                 </div>
             </div>
         </div>

@@ -1,12 +1,12 @@
 'use client';
 
 import { BsChevronRight } from "react-icons/bs";
-import { AiFillStar } from "react-icons/ai";
+import { AiFillStar, AiOutlineCheck } from "react-icons/ai";
 import { BiPlus, BiX } from "react-icons/bi";
 import { Button } from "./button";
 import { useAppDispatch, useAppSelector } from "../config/redux/hooks";
 import { hideModal, showModal } from "../config/redux/slices/modalSlice";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { addItem } from "../config/redux/slices/watchListSlice";
 
 export const MovieInfoModal = () => {
@@ -15,6 +15,12 @@ export const MovieInfoModal = () => {
     const dispatch = useAppDispatch();
     const [ data, setData ]: any = useState( null );
     const session = sessionStorage.getItem( 'movieData' );
+    const initialWatchlistStatus = useMemo(() => {
+        const storedStatus = sessionStorage.getItem('watchlistStatus');
+        return storedStatus ? JSON.parse(storedStatus) : {};
+      }, []);
+      
+      const [watchlistStatus, setWatchlistStatus] = useState(initialWatchlistStatus);
 
     const isLoading = !data;
     useEffect( () => {
@@ -30,7 +36,14 @@ export const MovieInfoModal = () => {
 
     const handleWatchlist = useCallback( () => {
         dispatch( addItem( data ) );
-    }, [ dispatch, data ] );
+        const updatedStatus = {
+            ...watchlistStatus,
+            [data.imdbId]: true,
+        };
+        setWatchlistStatus(updatedStatus);
+
+        sessionStorage.setItem('watchlistStatus', JSON.stringify(updatedStatus));
+    }, [ dispatch, data, watchlistStatus ] );
 
 
     if ( movieModal.isVisible ) {
@@ -103,7 +116,8 @@ export const MovieInfoModal = () => {
                                 <Button text="Watchlist" id="watchlist" buttonBg='#FFFFFF14' onClick={ ( e: any ) => {
                                     e.stopPropagation();
                                     handleWatchlist();
-                                } } content="center" width='100%' icon={ BiPlus } textStyle="text-sm text-tertiary font-medium" iconStyle='#5799ef' />
+                                } } content="center" width='100%' icon={watchlistStatus[data.imdbID] ? AiOutlineCheck: BiPlus } 
+                                textStyle="text-sm text-tertiary font-medium" iconStyle='#5799ef' />
                             </div>
                         </>
                     ) : (

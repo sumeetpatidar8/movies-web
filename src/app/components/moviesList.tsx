@@ -3,7 +3,7 @@
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination } from "swiper/modules";
 import { BsChevronRight } from "react-icons/bs";
-import { AiFillStar } from "react-icons/ai";
+import { AiFillStar, AiOutlineCheck, AiOutlineStar } from "react-icons/ai";
 import { Button } from './button';
 import { BiPlus, BiInfoCircle } from "react-icons/bi";
 import { BsFillPlayFill } from "react-icons/bs";
@@ -25,11 +25,23 @@ export const MoviesList = () => {
     };
     const data = useAppSelector( ( state ) => state.data.movieList );
     const dispatch = useAppDispatch();
+    const ratingModal = useAppSelector( ( state ) => state.visible.modal[ 'RATING' ] );
+    const session = useMemo( () => {
+        const storedData = sessionStorage.getItem( 'movieData' );
+        return storedData ? JSON.parse( storedData ) : [];
+    }, [] );
+    const [ info, setInfo ]: any = useState( session );
+    const [ reload, setReload ] = useState( false );
+    const initialWatchlistStatus = useMemo( () => {
+        const storedStatus = sessionStorage.getItem( 'watchlistStatus' );
+        return storedStatus ? JSON.parse( storedStatus ) : {};
+    }, [] );
 
+    const [ watchlistStatus, setWatchlistStatus ] = useState( initialWatchlistStatus );
 
-    const [ info, setInfo ]: any = useState( null );
-    const session = useMemo( () => sessionStorage.getItem( 'movieData' ), [] );
-
+    const ratingSession = sessionStorage.getItem( 'rating' );
+    const ratedId = sessionStorage.getItem( 'ratedId' );
+    const [ ratingData, setRatingData ]: any = useState( [] );
 
     useEffect( () => {
         if ( data.ids ) {
@@ -37,26 +49,45 @@ export const MoviesList = () => {
         }
 
         if ( session ) {
-            const res = JSON.parse( session );
-            setInfo( res );
+            setInfo( session );
+            setReload( false );
+        } else {
+            setReload( true );
         }
 
-    }, [ dispatch, data, session ] );
+        if ( ratingSession ) {
+            const result = JSON.parse( ratingSession );
+            setRatingData( result );
+        }
 
+    }, [ dispatch, data, session, ratingModal, ratingSession ] );
 
-    const handleModal = useCallback( (e:any, imdbId: string ) => {
+    const handleModal = useCallback( ( e: any, imdbId: string ) => {
         e.stopPropagation();
         dispatch( showModal( { id: 'MOVIE', imdbId: imdbId } ) );
     }, [ dispatch ] );
 
-    const handleWatchlist = useCallback((e:any, imdbId: string ) => {
+    const handleWatchlist = useCallback( ( e: any, imdbId: string ) => {
         e.stopPropagation();
-        info.map((item:any) => {
-            if(item.imdbID === imdbId) {
-                dispatch(addItem(item));
+        info.map( ( item: any ) => {
+            if ( item.imdbID === imdbId ) {
+                dispatch( addItem( item ) );
+                const updatedStatus = {
+                    ...watchlistStatus,
+                    [ imdbId ]: true,
+                };
+                setWatchlistStatus( updatedStatus );
+
+                sessionStorage.setItem( 'watchlistStatus', JSON.stringify( updatedStatus ) );
             }
-        })
-    }, [dispatch, info])
+        } );
+    }, [ dispatch, info, watchlistStatus ] );
+
+    if ( info.length == 0 ) {
+        setTimeout( "location.reload()", 2000 );
+        return <div>Loading...</div>;
+    }
+
 
     return (
         <>
@@ -97,26 +128,46 @@ export const MoviesList = () => {
                                             ) }
                                         </div>
                                         <div className="py-4 px-4 flex flex-col gap-2">
-                                            <div className="flex items-center gap-2">
-                                                <AiFillStar className="fill-yellow" />
-                                                { item && (
-                                                    info && (
-                                                        info.map( ( value: any ) => {
-                                                            if ( value.imdbID === item.imdbID ) {
-                                                                return (
-                                                                    value.imdbRating ? (
-                                                                        <p className="text-zinc-400 text-sm" key={ value.imdbID }>
-                                                                            { value.imdbRating }
-                                                                        </p>
-                                                                    ) : (
-                                                                        <div>Ratings Not Available</div>
+                                            <div className="flex items-center gap-4">
+                                                <div className="flex items-center gap-2">
+                                                    <AiFillStar className="fill-yellow" />
+                                                    { item && (
+                                                        info && (
+                                                            info.map( ( value: any ) => {
+                                                                if ( value.imdbID === item.imdbID ) {
+                                                                    return (
+                                                                        value.imdbRating ? (
+                                                                            <p className="text-zinc-400 text-sm" key={ value.imdbID }>
+                                                                                { value.imdbRating }
+                                                                            </p>
+                                                                        ) : (
+                                                                            <div>Ratings Not Available</div>
+                                                                        )
+                                                                    );
+                                                                }
+                                                                return null;
+                                                            } )
+                                                        )
+                                                    ) }
+                                                </div>
+                                                <div className="flex items-center gap-2">
+                                                    <AiOutlineStar className="text-modalColor" />
+                                                    {
+                                                        item && (
+                                                            ratingData.some( ( data: any ) => (
+                                                                data.id === item.imdbID && data.rating !== 0 && data.comment !== ''
+                                                            ) ) ? (
+                                                                ratingData.map( ( data: any ) => (
+                                                                    data.id === item.imdbID && data.rating !== 0 && data.comment !== '' && (
+                                                                        <p key={ data.id } className="text-sm text-modalColor">{ data.rating }<span className="text-zinc-400">/10</span></p>
                                                                     )
-                                                                );
-                                                            }
-                                                            return null;
-                                                        } )
-                                                    )
-                                                ) }
+                                                                ) )
+                                                            ) : (
+                                                                ''
+                                                            )
+                                                        )
+                                                    }
+                                                </div>
                                             </div>
                                             { item ? (
                                                 <h2 className="text-semibold">{ item.Title }</h2>
@@ -124,19 +175,19 @@ export const MoviesList = () => {
                                                 <h2 className="text-semibold">No Title</h2>
                                             ) }
                                             <div className="mt-6">
-                                                {item && (
+                                                { item && (
                                                     <Button
-                                                    text="Watchlist"
-                                                    buttonBg="#FFFFFF14"
-                                                    content="center"
-                                                    width="100%"
-                                                    id="watchlist"
-                                                    icon={ BiPlus }
-                                                    textStyle="text-sm text-tertiary font-medium"
-                                                    iconStyle="#5799ef"
-                                                    onClick={(e:any) => handleWatchlist(e, item.imdbID)}
-                                                />
-                                                )}
+                                                        text="Watchlist"
+                                                        buttonBg="#FFFFFF14"
+                                                        content="center"
+                                                        width="100%"
+                                                        id="watchlist"
+                                                        icon={ watchlistStatus[ item.imdbID ] ? AiOutlineCheck : BiPlus }
+                                                        textStyle="text-sm text-tertiary font-medium"
+                                                        iconStyle="#5799ef"
+                                                        onClick={ ( e: any ) => handleWatchlist( e, item.imdbID ) }
+                                                    />
+                                                ) }
                                             </div>
                                             {
                                                 item ? (
@@ -144,7 +195,7 @@ export const MoviesList = () => {
                                                         <Button text="Trailer" icon={ BsFillPlayFill } textStyle="text-sm" />
                                                         <div
                                                             className="rounded-3xl transition-all hover:bg-zinc-800 p-3 cursor-pointer"
-                                                            onClick={ (e:any) => handleModal(e, item.imdbID ) }
+                                                            onClick={ ( e: any ) => handleModal( e, item.imdbID ) }
                                                         >
                                                             <BiInfoCircle className="text-xl" />
                                                         </div>

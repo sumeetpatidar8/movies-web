@@ -1,12 +1,14 @@
 'use client'
 
 import { createSlice } from "@reduxjs/toolkit";
+import { comment } from "postcss";
 
 interface ModalState {
     modal: {
       [id: string]: {
         isVisible: boolean;
-        imdbId?: string 
+        imdbId?: string; 
+        results?: { rating: number; comments: string; }[],
       }
     }
   }
@@ -23,6 +25,10 @@ interface ModalState {
       WATCHLIST: {
         isVisible: false,
         imdbId: ''
+      },
+      RATING: {
+        isVisible: false,
+        results: [{ rating:0, comments: ''}]
       }
     },
   };
@@ -39,10 +45,16 @@ const modalSlice = createSlice({
           }
           },
           hideModal: (state, action) => {
-            const {id} = action.payload
+            const {id, response, imdbId} = action.payload
             if(state.modal[id]) {
               state.modal[id].isVisible = false;
-              state.modal[id].imdbId = '';
+              state.modal[id].imdbId = imdbId;
+              state.modal[id].results = [
+                ...state.modal[id].results || [],
+                response
+              ];
+              const data = JSON.stringify(state.modal[id].results);
+              sessionStorage.setItem('rating', data);
             }
           },
     },

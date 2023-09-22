@@ -19,7 +19,7 @@ export const NavigationBar = () => {
     }
 
     return(
-        <nav className="bg-secondary items-center py-1 px-10 flex justify-between gap-10 relative">
+        <nav className="bg-secondary items-center py-1 px-10 flex justify-between relative">
             <Logo />
             <Button icon={BiMenu} text={"Menu"} onClick={handleMenu} />
             <SearchBar />

@@ -1,5 +1,4 @@
-import Image from 'next/image'
-import { NavigationBar } from './components/navigationBar';
+
 import { MoviesList } from './components/moviesList';
 import { MovieInfoModal } from './components/movieInfoModal';
 import { WatchlistModal } from './components/watchlistModal';

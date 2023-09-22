@@ -13,9 +13,15 @@ const config: Config = {
         yellow: '#F5C518',
         hover: '#dbad05',
         tertiary: '#5799EF',
-        transparent: 'rgba(0,0,0,.6)'
+        transparent: 'rgba(0,0,0,.6)',
+        modalColor: '#136BC2'
       }
     },
+    screens: {
+      'desktopXl': '1040px',
+      'desktoplg': '',
+      'desktopsm':'840px'
+    }
   },
   plugins: [],
 }

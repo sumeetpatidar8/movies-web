@@ -6,7 +6,7 @@ const watchlistAdapter = createEntityAdapter<MovieData>({
 });
 
 const initialState = () => {
-    const savedData = localStorage.getItem('watchlistData');
+    const savedData = typeof window !== 'undefined' && localStorage.getItem('watchlistData');
     if(savedData) {
         const parsedData = JSON.parse(savedData);
        return {...watchlistAdapter.getInitialState({

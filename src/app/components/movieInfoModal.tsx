@@ -14,9 +14,9 @@ export const MovieInfoModal = () => {
     // const data = useAppSelector( ( state ) => state.data.singleMovie );
     const dispatch = useAppDispatch();
     const [ data, setData ]: any = useState( null );
-    const session = localStorage.getItem( 'movieData' );
+    const session = typeof window !== 'undefined' && localStorage.getItem( 'movieData' );
     const initialWatchlistStatus = useMemo(() => {
-        const storedStatus = localStorage.getItem('watchlistStatus');
+        const storedStatus = typeof window !== 'undefined' && localStorage.getItem('watchlistStatus');
         return storedStatus ? JSON.parse(storedStatus) : {};
       }, []);
       
@@ -42,7 +42,7 @@ export const MovieInfoModal = () => {
         };
         setWatchlistStatus(updatedStatus);
 
-        localStorage.setItem('watchlistStatus', JSON.stringify(updatedStatus));
+        typeof window !== 'undefined' && localStorage.setItem('watchlistStatus', JSON.stringify(updatedStatus));
     }, [ dispatch, data, watchlistStatus ] );
 
 

@@ -148,7 +148,7 @@ export const WatchlistModal = () => {
                                                     <div className="w-[10rem] max-sm:w-[20rem] max-xs:w-[10rem] mb-4">
                                                         <img src={ data.Poster } alt={ data.Title } className="max-w-[100%] w-full max-h-[100%] object-fill" />
                                                     </div>
-                                                    <div className="flex flex-col gap-4">
+                                                    <div className="flex flex-col gap-4 w-full pr-10">
                                                         <div className="flex justify-between">
                                                             <div className="title flex gap-2 items-center cursor-pointer">
                                                                 <h1 className="text-2xl font-bold">{ data.Title }</h1>

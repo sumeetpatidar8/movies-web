@@ -10,7 +10,7 @@ const inter = Inter( { subsets: [ 'latin' ] } );
 
 export const metadata: Metadata = {
   title: 'Movies Home',
-  description: 'Lisrt of Movies today',
+  description: 'List of Movies today',
 };
 
 export default function RootLayout ( {

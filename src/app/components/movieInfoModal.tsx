@@ -45,12 +45,14 @@ export const MovieInfoModal = () => {
         typeof window !== 'undefined' && localStorage.setItem('watchlistStatus', JSON.stringify(updatedStatus));
     }, [ dispatch, data, watchlistStatus ] );
 
-
-    if ( movieModal.isVisible ) {
-        document.body.style.overflowY = "hidden";
-    } else {
-        document.body.style.overflowY = "scroll";
-    }
+    useEffect(() => {
+        if (movieModal.isVisible) {
+            document.body.style.overflowY = "hidden";
+        } else {
+            document.body.style.overflowY = "scroll";
+        }
+    }, [movieModal]);
+    
 
     function convertMinutesToHoursAndMinutes ( runtime: string ) {
         const parts = runtime.split( " " );

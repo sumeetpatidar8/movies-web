@@ -29,11 +29,13 @@ export const WatchlistModal = () => {
 
     },[ratingModal, ratingSession])
 
-    if ( watchlistModal.isVisible ) {
-        document.body.style.overflowY = "hidden";
-    } else {
-        document.body.style.overflowY = "scroll";
-    }
+    useEffect(() => {
+        if ( watchlistModal.isVisible ) {
+            document.body.style.overflowY = "hidden";
+        } else {
+            document.body.style.overflowY = "scroll";
+        }
+    },[watchlistModal])
 
     const handleItemSelect = ( itemKey: string ) => {
         setSelectedItems( ( prevSelectedItems ) => {

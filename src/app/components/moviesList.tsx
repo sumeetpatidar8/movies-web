@@ -27,20 +27,20 @@ export const MoviesList = () => {
     const dispatch = useAppDispatch();
     const ratingModal = useAppSelector( ( state ) => state.visible.modal[ 'RATING' ] );
     const session = useMemo( () => {
-        const storedData = sessionStorage.getItem( 'movieData' );
+        const storedData = localStorage.getItem( 'movieData' );
         return storedData ? JSON.parse( storedData ) : [];
     }, [] );
     const [ info, setInfo ]: any = useState( session );
     const [ reload, setReload ] = useState( false );
     const initialWatchlistStatus = useMemo( () => {
-        const storedStatus = sessionStorage.getItem( 'watchlistStatus' );
+        const storedStatus = localStorage.getItem( 'watchlistStatus' );
         return storedStatus ? JSON.parse( storedStatus ) : {};
     }, [] );
 
     const [ watchlistStatus, setWatchlistStatus ] = useState( initialWatchlistStatus );
 
-    const ratingSession = sessionStorage.getItem( 'rating' );
-    const ratedId = sessionStorage.getItem( 'ratedId' );
+    const ratingSession = localStorage.getItem( 'rating' );
+    const ratedId = localStorage.getItem( 'ratedId' );
     const [ ratingData, setRatingData ]: any = useState( [] );
 
     useEffect( () => {
@@ -78,10 +78,16 @@ export const MoviesList = () => {
                 };
                 setWatchlistStatus( updatedStatus );
 
-                sessionStorage.setItem( 'watchlistStatus', JSON.stringify( updatedStatus ) );
+                localStorage.setItem( 'watchlistStatus', JSON.stringify( updatedStatus ) );
             }
         } );
     }, [ dispatch, info, watchlistStatus ] );
+     
+    if(info.length == 0) {
+        setTimeout(info, 2000);
+        return(<div>Loading...</div>)
+        window.location.reload();
+    }
 
 
     return (

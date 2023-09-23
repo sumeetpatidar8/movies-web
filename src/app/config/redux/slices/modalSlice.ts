@@ -57,7 +57,7 @@ const modalSlice = createSlice({
                 response
               ];
               const data = JSON.stringify(state.modal[id].results);
-              sessionStorage.setItem('rating', data);
+              localStorage.setItem('rating', data);
             }
           },
     },

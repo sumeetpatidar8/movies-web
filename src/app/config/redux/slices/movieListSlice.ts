@@ -133,7 +133,7 @@ const moviedataSlice = createSlice( {
             } )
             .addCase(fetchMultipleSingleData.fulfilled, (state, action) => {
                 const serializedData = JSON.stringify(action.payload);
-                sessionStorage.setItem('movieData', serializedData);
+                localStorage.setItem('movieData', serializedData);
               });
 
     },

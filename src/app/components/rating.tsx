@@ -16,7 +16,7 @@ export const Rating = ( props: any ) => {
     };
 
     useEffect(() => {
-        const ratingSession = sessionStorage.getItem('rating');
+        const ratingSession = localStorage.getItem('rating');
         if(ratingSession) {
             const rating = JSON.parse(ratingSession);
             rating.map((item:any) => {

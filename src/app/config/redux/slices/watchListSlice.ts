@@ -6,7 +6,7 @@ const watchlistAdapter = createEntityAdapter<MovieData>({
 });
 
 const initialState = () => {
-    const savedData = sessionStorage.getItem('watchlistData');
+    const savedData = localStorage.getItem('watchlistData');
     if(savedData) {
         const parsedData = JSON.parse(savedData);
        return {...watchlistAdapter.getInitialState({
@@ -27,21 +27,21 @@ const watchlistSlice = createSlice({
         addItem: (state, action) => {
             watchlistAdapter.addOne(state, action);
             state.watchlistLength = state.ids.length;
-            sessionStorage.setItem('watchlistData', JSON.stringify(state));
+            localStorage.setItem('watchlistData', JSON.stringify(state));
         },
         removeItem: (state, action) => {
             watchlistAdapter.removeOne(state, action);
             state.watchlistLength = state.ids.length;
-            sessionStorage.setItem('watchlistData', JSON.stringify(state));
+            localStorage.setItem('watchlistData', JSON.stringify(state));
         },
         removeMultipleItems: (state, action) => {
             watchlistAdapter.removeMany(state, action);
             state.watchlistLength = state.ids.length;
-            sessionStorage.setItem('watchlistData', JSON.stringify(state));
+            localStorage.setItem('watchlistData', JSON.stringify(state));
         },
         updateItem: (state, action) => {
             watchlistAdapter.updateOne(state, action);
-            sessionStorage.setItem('watchlistData', JSON.stringify(state));
+            localStorage.setItem('watchlistData', JSON.stringify(state));
         },
     },
 });

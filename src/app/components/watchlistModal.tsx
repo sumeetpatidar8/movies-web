@@ -18,7 +18,7 @@ export const WatchlistModal = () => {
     const info = watchlist.entities;
     const [ selectedItems, setSelectedItems ] = useState<Set<string>>( new Set() );
     const [selectAllChecked, setSelectAllChecked] = useState(false);
-    const ratingSession = sessionStorage.getItem('rating');
+    const ratingSession = localStorage.getItem('rating');
     const [ratingData, setRatingData]:any = useState([]);
 
     useEffect(() => {
@@ -54,14 +54,14 @@ export const WatchlistModal = () => {
         dispatch( removeMultipleItems( selectedItemsArray ) );
         setSelectedItems( new Set() );
         setSelectAllChecked(false);
-        const session = sessionStorage.getItem('watchlistStatus');
+        const session = localStorage.getItem('watchlistStatus');
         if(session) {
             const status = JSON.parse(session);
             const updatedStatus = {...status};
             selectedItemsArray.forEach((item:any) => {
                 updatedStatus[item] = false;
             })
-            sessionStorage.setItem('watchlistStatus', JSON.stringify(updatedStatus));
+            localStorage.setItem('watchlistStatus', JSON.stringify(updatedStatus));
         }
     }, [ dispatch, selectedItemsArray ] );
 
@@ -69,14 +69,14 @@ export const WatchlistModal = () => {
     const handleSingleDelete = useCallback((imdbID:string) => {
         dispatch( removeItem( imdbID ) );
         setSelectedItems( new Set() );
-        const session = sessionStorage.getItem('watchlistStatus');
+        const session = localStorage.getItem('watchlistStatus');
         if(session) {
             const status = JSON.parse(session);
             const updatedStatus = {
                 ...status,
                 [imdbID]: false,
             }
-            sessionStorage.setItem('watchlistStatus', JSON.stringify(updatedStatus));
+            localStorage.setItem('watchlistStatus', JSON.stringify(updatedStatus));
         }
     },[dispatch])
     function convertMinutesToHoursAndMinutes ( runtime: string ) {

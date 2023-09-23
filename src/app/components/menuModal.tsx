@@ -51,7 +51,7 @@ export const MenuModal = () => {
     const dispatch = useAppDispatch();
 
     return(
-        <section className=" bg-secondary absolute z-10 top-0 px-44 py-24 w-screen transition-all duration-200 max-md:px-28 max-sm:px-10" style={modal.isVisible? {transform: 'translateY(0rem)'} : {transform: 'translateY(-100rem)'}}>
+        <section className=" bg-secondary absolute z-10 top-0 w-full h-full px-44 py-24 w-screen transition-all duration-200 max-md:px-28 max-sm:px-10" style={modal.isVisible? {transform: 'translateY(0rem)'} : {transform: 'translateY(-100rem)'}}>
             <div className="flex justify-between">
                 <Logo />
                 <div className="cursor-pointer bg-yellow text-black rounded-3xl py-2 px-2 transition-all hover:bg-hover">

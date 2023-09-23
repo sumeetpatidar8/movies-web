@@ -1,11 +1,9 @@
 'use client';
-import { createPortal } from "react-dom";
 import { Button } from "./button";
 import { Dropdown } from "./dropdown";
 import { Logo } from "./logo";
 import { BiMenu, BiX } from "react-icons/bi";
 import { BiSolidBookmarkPlus } from "react-icons/bi";
-import { MenuModal } from "./menuModal";
 import { useAppDispatch, useAppSelector } from "../config/redux/hooks";
 import { hideModal, showModal } from "../config/redux/slices/modalSlice";
 
@@ -30,10 +28,6 @@ export const MobileNavigationBar = () => {
             <Button image={ BiMenu } text={ "Sign in" } />
             </div>
             <Dropdown />
-            { createPortal(
-                <MenuModal />,
-                document.body
-            ) }
         </nav>
     );
 };

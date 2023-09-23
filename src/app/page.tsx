@@ -2,6 +2,7 @@
 import { MoviesList } from './components/moviesList';
 import { MovieInfoModal } from './components/movieInfoModal';
 import { WatchlistModal } from './components/watchlistModal';
+import { MenuModal } from './components/menuModal';
 
 export default function Home() {
   return (
@@ -9,6 +10,7 @@ export default function Home() {
       <MoviesList />
       <MovieInfoModal />
       <WatchlistModal />
+      <MenuModal />
     </main>
   )
 }

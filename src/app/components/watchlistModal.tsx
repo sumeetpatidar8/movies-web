@@ -112,7 +112,7 @@ export const WatchlistModal = () => {
 
     return (
         <div className="fixed z-10 top-0 left-0 w-full h-full flex-col bg-transparent transition-all py-20 px-80" style={ watchlistModal.isVisible ? { opacity: 1, zIndex: 10 } : { opacity: 0, zIndex: -1 } }>
-            <div className="fixed top-0 right-0 h-full overflow-y-auto w-[80%] transition-all" style={ watchlistModal.isVisible ? { transform: 'translateX(0px)', zIndex: 20 } : { transform: 'translateX(200px)', zIndex: 0 } }>
+            <div className="fixed top-0 right-0 h-full overflow-y-auto w-full transition-all" style={ watchlistModal.isVisible ? { transform: 'translateX(0px)', zIndex: 20 } : { transform: 'translateX(200px)', zIndex: 0 } }>
                 <div className="bg-gray-100 py-6 flex items-center justify-between px-4 border-y-[1px] border-zinc-500 text-gray-900">
                     <h1 className="text-2xl font-medium">Your Watchlist</h1>
                     <div className="cursor-pointer flex justify-end">
@@ -142,8 +142,8 @@ export const WatchlistModal = () => {
                                     <React.Fragment key={data.imdbID}>
                                         { data && (
                                             <>
-                                                <div className="flex gap-4 bg-white px-4 pb-6 pt-6 text-black hover:bg-slate-100 border-b-[1px] transition-all border-slate-400">
-                                                    <div className="w-[15%] mb-4">
+                                                <div className="flex max-xs:flex-col max-xs:items-center gap-4 bg-white px-4 pb-6 pt-6 text-black hover:bg-slate-100 border-b-[1px] transition-all border-slate-400">
+                                                    <div className="w-[10rem] max-sm:w-[20rem] max-xs:w-[10rem] mb-4">
                                                         <img src={ data.Poster } alt={ data.Title } className="max-w-[100%] w-full max-h-[100%] object-fill" />
                                                     </div>
                                                     <div className="flex flex-col gap-4">
@@ -191,7 +191,7 @@ export const WatchlistModal = () => {
                                                         <p className="font-medium text-xs">
                                                              {
                                                                 ratingData.some((item: any) => (
-                                                                  item.id === data.imdbID && item.rating !== 0 && item.comment !== ''
+                                                                  item && item.id === data.imdbID && item.rating !== 0 && item.comment !== ''
                                                                 )) ? (
                                                                   ratingData.find((item: any) => (
                                                                     item.id === data.imdbID && item.rating !== 0 && item.comment !== ''
@@ -205,7 +205,7 @@ export const WatchlistModal = () => {
                                                         <Rating imdb={data.imdbID} />
                                                         </div>
                                                         <div className="text-black">
-                                                            <p className="text-sm ">{ data.Plot }</p>
+                                                            <p className="text-sm max-sm:text-[10px] ">{ data.Plot }</p>
                                                         </div>
                                                     </div>
                                                 </div>

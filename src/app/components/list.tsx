@@ -10,7 +10,7 @@ interface ListProps {
 export const List = (props:ListProps) => {
     const data = props.data;
     return(
-        <div className="flex flex-wrap justify-between mt-14">
+        <div className="flex flex-wrap  max-xs:flex-col justify-between mt-14">
             {Object.entries(data).map(([section, {icon: Icon, category}]) => (
                     <div key={section} className="text-white flex flex-col gap-2 mb-10">
                         <div className="flex items-center text-xl font-semibold gap-2">

@@ -4,8 +4,8 @@ export const Button = (props:any) => {
 
 
     return(
-        <div className="h-full">
-            <button onClick={props.onClick} className="flex text-xs font-semibold items-center gap-1 hover:bg-zinc-800 transition-all rounded p-2 " style={{backgroundColor: props.buttonBg, width: props.width, justifyContent: props.content}} id={props.id}> {
+        <div className={`${props.class}`}>
+            <button onClick={props.onClick} className="flex text-xs font-semibold items-center gap-1 hover:bg-zinc-800 transition-all rounded p-2 " style={{backgroundColor: props.buttonBg, borderRadius:props.rounded, width: props.width, justifyContent: props.content}} id={props.id}> {
                 props.icon && (
                     <props.icon className="text-xl" style={{color: props.iconStyle}} />
                 )

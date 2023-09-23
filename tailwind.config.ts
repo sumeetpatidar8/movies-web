@@ -18,9 +18,13 @@ const config: Config = {
       }
     },
     screens: {
-      'desktopXl': '1040px',
-      'desktoplg': '',
-      'desktopsm':'840px'
+      'xl':'1050px',
+      'xl/1': '950px',
+      'xl/2': '874px',
+      'lg': '840px',
+      'md': '800px',
+      'sm': '650px',
+      'xs':'450px'
     }
   },
   plugins: [],

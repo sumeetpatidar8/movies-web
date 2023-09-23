@@ -21,7 +21,7 @@ export const Rating = ( props: any ) => {
         if(ratingSession) {
             const rating = JSON.parse(ratingSession);
             rating.map((item:any) => {
-                if(item.id === ratingModal.imdbId) {
+                if(item && item.id === ratingModal.imdbId) {
                     setHoveredStars(item.rating);
                 setComment(item.comment);
                 }

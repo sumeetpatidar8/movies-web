@@ -29,15 +29,15 @@ export const SearchBar = () => {
         }
     };
     return (
-        <div className="flex rounded bg-white transition-all justify-between duration-100 w-[50%] searchBar" onKeyDown={handleKeyDown}>
+        <div className="flex rounded bg-white transition-all justify-between duration-100 w-[60%] max-xl/2:w-[50%] max-lg:w-full searchBar" onKeyDown={handleKeyDown}>
             <div className="flex items-center gap-2 text-black border-r-[1px] rounded-l border-neutral-500 bg-white px-2 cursor-pointer transition-all hover:bg-slate-100" onClick={(e) => {e.stopPropagation(); dispatch(toggleDropdown())}}>
                 <button className="text-xs font-semibold">{dropdown.selectedOption}</button>
                 <BsFillCaretDownFill className="text-xs" />
             </div>
-            <div className="flex w-[80%] px-2">
-                <input type="text" className='text-black' placeholder="Search IMdb" value={search} onChange={(e) => setSearch(e.target.value)} />
+            <div className="flex w-full px-2">
+                <input type="text" className='text-black w-full' placeholder="Search IMdb" value={search} onChange={(e) => setSearch(e.target.value)} />
             </div>
-            <div className="flex px-2 py-1 cursor-pointer" onClick={e => {handleSearch()}}>
+            <div className="flex px-2 py-1 cursor-pointer bg-white rounded" onClick={e => {handleSearch()}}>
                 <AiOutlineSearch className="text-xl text-slate-500" />
             </div>
         </div>

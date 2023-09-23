@@ -108,6 +108,28 @@ export const MoviesList = () => {
                         pagination={ pagination }
                         navigation={ true }
                         modules={ [ Pagination, Navigation ] }
+                        breakpoints={{
+                            0: {
+                                slidesPerView:1,
+                                spaceBetween: 30,
+                            },
+                            450: {
+                                slidesPerView:2,
+                                spaceBetween: 30,
+                            },
+                            650: {
+                              slidesPerView: 3,
+                              spaceBetween: 30,
+                            },
+                            950: {
+                              slidesPerView: 4,
+                              spaceBetween: 30,
+                            },
+                            1115: {
+                              slidesPerView: 5,
+                              spaceBetween: 30,
+                            },
+                          }}
                         className="mySwiper w-full h-full"
                     >
                         { Object.keys( data.entities ).map( ( movieID ) => {
@@ -155,7 +177,7 @@ export const MoviesList = () => {
                                                     {
                                                         item && (
                                                             ratingData.some( ( data: any ) => (
-                                                                data.id === item.imdbID && data.rating !== 0 && data.comment !== ''
+                                                                data && data.id === item.imdbID && data.rating !== 0 && data.comment !== ''
                                                             ) ) ? (
                                                                 ratingData.map( ( data: any ) => (
                                                                     data.id === item.imdbID && data.rating !== 0 && data.comment !== '' && (

@@ -29,6 +29,9 @@ interface ModalState {
       RATING: {
         isVisible: false,
         results: [{ rating:0, comments: ''}]
+      },
+      SIDEMENU: {
+        isVisible: false,
       }
     },
   };

@@ -1,5 +1,4 @@
 'use client'
-import { createPortal } from "react-dom";
 import { Button } from "./button";
 import { Dropdown } from "./dropdown";
 import { Logo } from "./logo";
@@ -27,10 +26,6 @@ export const NavigationBar = () => {
             <Button icon={BiSolidBookmarkPlus} text={"Watchlist"} class="max-lg:hidden" onClick={() => dispatch(showModal({id: 'WATCHLIST'}))} badge={watchlistLength.watchlistLength>0?(watchlistLength.watchlistLength):('')} />
             <Button image={BiMenu} text={"Sign in"} class="max-lg:hidden" />
             <Dropdown />
-            {createPortal(
-                <MenuModal/>,
-                document.body
-            )}
         </nav>
     )
 };

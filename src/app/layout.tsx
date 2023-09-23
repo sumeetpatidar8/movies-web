@@ -4,6 +4,7 @@ import { Inter } from 'next/font/google';
 import { NavigationBar } from './components/navigationBar';
 import { Providers } from './config/redux/provider';
 import { MobileNavigationBar } from './components/mobileMenu';
+import { Footer } from './components/footer';
 
 const inter = Inter( { subsets: [ 'latin' ] } );
 
@@ -21,9 +22,10 @@ export default function RootLayout ( {
     <html lang="en">
       <body className={ inter.className }>
         <Providers>
-        <MobileNavigationBar />
+          <MobileNavigationBar />
           <NavigationBar />
           { children }
+          <Footer />
         </Providers>
       </body>
     </html>

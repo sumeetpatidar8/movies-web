@@ -68,7 +68,7 @@ export const MovieInfoModal = () => {
     }
 
     return (
-        <div className="fixed z-10 top-0 left-0 w-full h-full flex-col bg-transparent transition-all py-20 px-80" style={ movieModal.isVisible ? { opacity: 1, zIndex: 10 } : { opacity: 0, zIndex: -1 } }>
+        <div className="fixed z-10 top-0 left-0 w-full h-full flex-col bg-transparent transition-all py-20 max-xs:px-2 max-2xl:px-40 max-xl/1:px-20 max-lg:px-10 max-xs:py-4 max-sm:px-2 px-80" style={ movieModal.isVisible ? { opacity: 1, zIndex: 10 } : { opacity: 0, zIndex: -1 } }>
             <div className="cursor-pointer flex justify-end">
                 <BiX className="hover:bg-zinc-800/75 rounded-3xl transition-all w-[40px] h-[40px] py-2 text-xl text-white" onClick={ ( e: any ) => {
                     e.stopPropagation();
@@ -81,8 +81,8 @@ export const MovieInfoModal = () => {
                 ) : (
                     data ? (
                         <>
-                            <div className="flex gap-4">
-                                <div className="w-[18%] mb-4">
+                            <div className="flex max-xs:flex-col max-xs:items-center gap-4">
+                                <div className="w-[18%] max-xs:w-[30%] max-sm:w-[25%] mb-2">
                                     <img src={ data.Poster } alt={ data.Title } className="max-w-[100%] w-full max-h-[100%] object-fill" />
                                 </div>
                                 <div className="flex flex-col gap-4">

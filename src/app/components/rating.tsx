@@ -1,9 +1,8 @@
 'use client';
 import { useCallback, useEffect, useState } from "react";
-import { AiFillCloseCircle, AiFillStar, AiOutlineStar } from "react-icons/ai";
+import { AiFillStar, AiOutlineStar } from "react-icons/ai";
 import { useAppDispatch, useAppSelector } from "../config/redux/hooks";
 import { hideModal } from "../config/redux/slices/modalSlice";
-import { comment } from 'postcss';
 
 export const Rating = ( props: any ) => {
     const [ comment, setComment ] = useState( ' ' );
@@ -27,7 +26,7 @@ export const Rating = ( props: any ) => {
                 }
             })
         }
-    }, [])
+    }, [ratingModal.imdbId])
     const handleSubmit = useCallback(() => {
         if(hoveredStars != 0 || comment !== '') {
             const response = { 'rating': hoveredStars, 'comments': comment, id: ratingModal.imdbId };
@@ -35,12 +34,12 @@ export const Rating = ( props: any ) => {
         }
     },[dispatch, comment, hoveredStars, ratingModal])
 
-    const handleClose = useCallback( ( rate: number ) => {
+    const handleClose = useCallback( ( imdbId:string | undefined ) => {
         setHoveredStars(0);
         setComment('');
-        const response = { 'rating': hoveredStars, 'comments': comment, id: ratingModal.imdbId };
+        const response = { 'rating': 0, 'comments': '', id: imdbId };
         dispatch( hideModal( { id: 'RATING', response: response } ) );
-    }, [ dispatch, hoveredStars, comment, ratingModal ] );
+    }, [ dispatch ] );
     
 
     if ( props.imdb !== ratingModal.imdbId ) {
@@ -74,7 +73,7 @@ export const Rating = ( props: any ) => {
                 <textarea id="comments" rows={ 4 } cols={ 50 } value={ comment } className="text-black text-xs" onChange={ ( e ) => setComment( e.target.value ) } />
                 <div className="flex items center text-black gap-4 text-xs">
                     <button type="submit" onClick={() => handleSubmit()}>Submit</button>
-                    <button type="reset" className="text-gray-500" onClick={ ( e: any ) => handleClose( 0 ) }>Cancel</button>
+                    <button type="reset" className="text-gray-500" onClick={ ( e: any ) => handleClose( ratingModal.imdbId ) }>Cancel</button>
                 </div>
             </div>
         </div>

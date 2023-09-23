@@ -83,11 +83,6 @@ export const MoviesList = () => {
         } );
     }, [ dispatch, info, watchlistStatus ] );
 
-    if ( info.length == 0 ) {
-        setTimeout( "location.reload()", 2000 );
-        return <div>Loading...</div>;
-    }
-
 
     return (
         <>
